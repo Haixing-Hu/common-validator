@@ -43,7 +43,7 @@ public @interface NotEmpty {
 
   Class<? extends Payload>[] payload() default { };
 
-  String value();
+  String value() default "";
 
   @Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE })
   @Retention(RUNTIME)

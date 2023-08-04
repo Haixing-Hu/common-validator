@@ -29,12 +29,21 @@ public abstract class BaseValidator<A extends Annotation, T>
   public boolean isValid(final T value, final ConstraintValidatorContext context) {
     final boolean valid = validate(value);
     if (! valid) {
-      final String message = AnnotationUtils.getAttribute(annotation, "message");
+      final String message = getErrorMessage();
       context.disableDefaultConstraintViolation();
       context.buildConstraintViolationWithTemplate(message)
              .addConstraintViolation();
     }
     return valid;
+  }
+
+  private String getErrorMessage() {
+    final String message = AnnotationUtils.getAttributeOrNull(annotation, "message");
+    if (message != null) {
+      return message;
+    }
+    final String annotationName = annotation.annotationType().getSimpleName();
+    return "The value of the field is invalid according to the annotation @" + annotationName;
   }
 
   public abstract boolean validate(T value);
