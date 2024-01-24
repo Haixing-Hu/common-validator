@@ -14,7 +14,7 @@
   <parent>
     <groupId>ltd.qubit</groupId>
     <artifactId>pom-root</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>common-validator</artifactId>
@@ -43,19 +43,23 @@
       <artifactId>hibernate-validator-annotation-processor</artifactId>
     </dependency>
     <dependency>
+      <groupId>jakarta.el</groupId>
+      <artifactId>jakarta.el-api</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>jakarta.el</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <!-- Testing -->
     <dependency>
       <groupId>ltd.qubit</groupId>
       <artifactId>common-test</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>ltd.qubit</groupId>
       <artifactId>common-random</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

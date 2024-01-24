@@ -8,12 +8,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 package ltd.qubit.commons.validator;
 
-import java.util.regex.Pattern;
-
-import javax.annotation.RegEx;
-
 import ltd.qubit.commons.reflect.AnnotationUtils;
 import ltd.qubit.commons.validator.annotation.PersonName;
+import ltd.qubit.commons.validator.rule.PersonNameType;
+import ltd.qubit.commons.validator.rule.PersonNameValidationRule;
 
 /**
  * 用户姓名验证器。
@@ -54,69 +52,15 @@ import ltd.qubit.commons.validator.annotation.PersonName;
  */
 public class PersonNameValidator extends BaseValidator<PersonName, String> {
 
-  /**
-   * 验证中文姓名的正则表达式。
-   */
-  @RegEx
-  private static final String CHINESE_REGEX =
-          "^[\\x{4E00}-\\x{9FEF}"
-          + "\\x{3400}-\\x{4DBF}"
-          + "\\x{E844}\\x{E863}"
-          + "\\x{20000}-\\x{2A6D6}"
-          + "\\x{2A700}-\\x{2B734}"
-          + "\\x{2B740}-\\x{2B81D}"
-          + "\\x{2B820}-\\x{2CEA1}"
-          + "\\x{2CEB0}-\\x{2EBE0}"
-          + "\\x{F900}-\\x{FAD9}"
-          + "\\x{2F800}-\\x{2FA1F}"
-          + "·.]{2,30}$";
-
-  private static final Pattern CHINESE_PATTERN = Pattern.compile(CHINESE_REGEX);
-
-  /**
-   * 验证汉语拼音名字的正则表达式。
-   */
-  @RegEx
-  private static final String PINYIN_REGEX = "^[a-zA-Z .]{2,60}$";
-
-  private static final Pattern PINYIN_PATTERN = Pattern.compile(PINYIN_REGEX);
-
-  /**
-   * 验证英文姓名的正则表达式。
-   */
-  @RegEx
-  private static final String ENGLISH_REGEX = "^[a-zA-Z .]{2,60}$";
-
-  private static final Pattern ENGLISH_PATTERN = Pattern.compile(ENGLISH_REGEX);
+  private final PersonNameValidationRule rule = new PersonNameValidationRule();
 
   @Override
   public boolean validate(final String str) {
-    final PersonNameType type = AnnotationUtils.getAttribute(annotation, "value");
-    return validate(str, type);
-  }
-
-  public boolean validate(final String str, final PersonNameType type) {
-    if (str == null || str.isEmpty()) {
-      return false;
+    PersonNameType type = AnnotationUtils.getAttribute(annotation, "value");
+    if (type == null) {
+      type = PersonNameType.ANY;
     }
-    final boolean valid;
-    switch (type) {
-      case CHINESE:
-        valid = CHINESE_PATTERN.matcher(str).matches();
-        break;
-      case PINYIN:
-        valid = PINYIN_PATTERN.matcher(str).matches();
-        break;
-      case ENGLISH:
-        valid = ENGLISH_PATTERN.matcher(str).matches();
-        break;
-      case ANY:
-      default:
-        valid = PINYIN_PATTERN.matcher(str).matches()
-                || ENGLISH_PATTERN.matcher(str).matches()
-                || CHINESE_PATTERN.matcher(str).matches();
-        break;
-    }
-    return valid;
+    rule.setType(type);
+    return rule.validate(str);
   }
 }

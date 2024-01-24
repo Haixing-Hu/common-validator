@@ -8,11 +8,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 package ltd.qubit.commons.validator;
 
-import java.util.regex.Pattern;
-
-import javax.annotation.RegEx;
-
 import ltd.qubit.commons.validator.annotation.Email;
+import ltd.qubit.commons.validator.rule.EmailValidationRule;
 
 /**
  * 电子邮件地址验证器。
@@ -27,18 +24,8 @@ import ltd.qubit.commons.validator.annotation.Email;
  */
 public class EmailValidator extends BaseValidator<Email, String> {
 
-  @RegEx
-  private static final String REGEX = "^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~]"
-      + "(\\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\\.?[a-zA-Z0-9])*"
-      + "\\.[a-zA-Z](-?[a-zA-Z0-9])+$";
-
-  private static final Pattern PATTERN = Pattern.compile(REGEX);
-
   @Override
   public boolean validate(final String str) {
-    if (str == null || str.isEmpty()) {
-      return false;
-    }
-    return PATTERN.matcher(str).matches();
+    return EmailValidationRule.INSTANCE.validate(str);
   }
 }

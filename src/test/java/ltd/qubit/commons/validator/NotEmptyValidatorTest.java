@@ -71,12 +71,12 @@ public class NotEmptyValidatorTest extends ValidatorTestBase {
     final Set<ConstraintViolation<NotEmptyWithoutValueBean>> v1 = validator.validate(b1);
     assertEquals(1, v1.size());
     final Iterator<ConstraintViolation<NotEmptyWithoutValueBean>> i1 = v1.iterator();
-    assertEquals("name不能为空。", i1.next().getMessage());
+    assertEquals("不能为空。", i1.next().getMessage());
 
     final NotEmptyWithoutValueBean b2 = new NotEmptyWithoutValueBean("");
     final Set<ConstraintViolation<NotEmptyWithoutValueBean>> v2 = validator.validate(b2);
     assertEquals(1, v2.size());
     final Iterator<ConstraintViolation<NotEmptyWithoutValueBean>> i2 = v2.iterator();
-    assertEquals("name不能为空。", i2.next().getMessage());
+    assertEquals("不能为空。", i2.next().getMessage());
   }
 }

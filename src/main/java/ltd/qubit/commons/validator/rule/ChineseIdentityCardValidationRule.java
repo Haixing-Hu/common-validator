@@ -1,18 +1,23 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2024.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-package ltd.qubit.commons.validator;
+package ltd.qubit.commons.validator.rule;
 
-import ltd.qubit.commons.validator.annotation.IdentityCard;
-import ltd.qubit.commons.validator.rule.ChineseIdentityCardValidationRule;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
+
+import static ltd.qubit.commons.validator.rule.impl.ChineseIdentityCardUtils.LAST_CHAR;
+import static ltd.qubit.commons.validator.rule.impl.ChineseIdentityCardUtils.NUMBER_LENGTH;
+import static ltd.qubit.commons.validator.rule.impl.ChineseIdentityCardUtils.RATIO;
+import static ltd.qubit.commons.validator.rule.impl.ChineseIdentityCardUtils.isBirthdayValid;
 
 /**
- * 中华人民共和国大陆身份证号码验证器。
+ * 中华人民共和国大陆身份证号码验证规则。
  * <p>
  * 身份证号码第1~6位为地址码，表示登记户口时所在地的行政区划代码（省、市、县）。
  * 其中1-2位省、自治区、直辖市代码；3-4位地级市、盟、自治州代码；5-6位县、县级 市、区代码。
@@ -46,7 +51,11 @@ import ltd.qubit.commons.validator.rule.ChineseIdentityCardValidationRule;
  *
  * @author 胡海星
  */
-public class IdentityCardValidator extends BaseValidator<IdentityCard, String> {
+@Immutable
+@ThreadSafe
+public class ChineseIdentityCardValidationRule implements ValidationRule<String> {
+
+  public static final ChineseIdentityCardValidationRule INSTANCE = new ChineseIdentityCardValidationRule();
 
   /**
    * 验证身份证号码是否合法。
@@ -73,6 +82,30 @@ public class IdentityCardValidator extends BaseValidator<IdentityCard, String> {
    */
   @Override
   public boolean validate(final String number) {
-    return ChineseIdentityCardValidationRule.INSTANCE.validate(number);
+    // 验证长度是否合法
+    if (number == null || number.length() != NUMBER_LENGTH) {
+      return false;
+    }
+    // 验证奇偶校验码是否合法
+    int sum = 0;
+    for (int i = 0; i < NUMBER_LENGTH - 1; ++i) {
+      final char ch = number.charAt(i);
+      if (ch < '0' || ch > '9') {
+        return false;
+      }
+      sum += (ch - '0') * RATIO[i];
+    }
+    final char lastChar = LAST_CHAR[sum % LAST_CHAR.length];
+    if (Character.toUpperCase(number.charAt(NUMBER_LENGTH - 1)) != lastChar) {
+      return false;
+    }
+    // 验证出生日期是否合法
+    return isBirthdayValid(number);
+    // 验证地址区县是否合法
+    // FIXME: 暂时不支持旧地区编码
+    //    if (! isAreaValid(number)) {
+    //      return false;
+    //    }
   }
+
 }

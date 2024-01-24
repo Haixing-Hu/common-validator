@@ -1,18 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2024.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-package ltd.qubit.commons.validator;
+package ltd.qubit.commons.validator.rule;
 
-import ltd.qubit.commons.validator.annotation.Mobile;
-import ltd.qubit.commons.validator.rule.ChineseMobileValidationRule;
+import java.util.regex.Pattern;
+
+import javax.annotation.Nullable;
+import javax.annotation.RegEx;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
- * 中国大陆手机号码验证器。
+ * 中国大陆手机号码验证规则。
  *
  * <ul>
  * <li>手机号码可以以 "0", "86", "17951" 开头</li>
@@ -34,9 +38,22 @@ import ltd.qubit.commons.validator.rule.ChineseMobileValidationRule;
  * 最新手机号段归属地数据库(2019年2月新春版)</a>
  * @author 胡海星
  */
-public class MobileValidator extends BaseValidator<Mobile, String> {
+@Immutable
+@ThreadSafe
+public class ChineseMobileValidationRule {
 
-  public boolean validate(final String str) {
-    return ChineseMobileValidationRule.INSTANCE.validate(str);
+  public static final ChineseMobileValidationRule INSTANCE = new ChineseMobileValidationRule();
+
+  @RegEx
+  private static final String REGEX =
+      "^(0|86|17951)?(13[0-9]|14[5-9]|15[0-35-9]|16[5-6]|17[0-8]|18[0-9]|19[89])[0-9]{8}$";
+
+  private static final Pattern PATTERN = Pattern.compile(REGEX);
+
+  public boolean validate(@Nullable final String mobile) {
+    if (mobile == null || mobile.isEmpty()) {
+      return false;
+    }
+    return PATTERN.matcher(mobile).matches();
   }
 }

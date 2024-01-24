@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import ltd.qubit.commons.validator.PersonNameType;
+import ltd.qubit.commons.validator.rule.PersonNameType;
 import ltd.qubit.commons.validator.PersonNameValidator;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
