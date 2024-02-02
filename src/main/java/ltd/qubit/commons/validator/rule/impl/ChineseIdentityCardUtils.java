@@ -16,9 +16,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
-import ltd.qubit.commons.error.InitializationError;
 import ltd.qubit.commons.lang.SystemUtils;
-import ltd.qubit.commons.util.PropertiesUtils;
+import ltd.qubit.commons.util.properties.PropertiesUtils;
 import ltd.qubit.commons.validator.IdentityCardValidator;
 
 import static java.nio.charset.StandardCharsets.UTF_8;

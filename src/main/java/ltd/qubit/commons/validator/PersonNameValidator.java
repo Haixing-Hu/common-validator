@@ -52,15 +52,15 @@ import ltd.qubit.commons.validator.rule.PersonNameValidationRule;
  */
 public class PersonNameValidator extends BaseValidator<PersonName, String> {
 
-  private final PersonNameValidationRule rule = new PersonNameValidationRule();
-
   @Override
   public boolean validate(final String str) {
-    PersonNameType type = AnnotationUtils.getAttribute(annotation, "value");
-    if (type == null) {
-      type = PersonNameType.ANY;
+    final PersonNameType type = AnnotationUtils.getAttribute(annotation, "value");
+    final PersonNameValidationRule rule;
+    if (type == null || type == PersonNameType.ANY) {
+      rule = PersonNameValidationRule.INSTANCE;
+    } else {
+      rule = new PersonNameValidationRule(type);
     }
-    rule.setType(type);
     return rule.validate(str);
   }
 }

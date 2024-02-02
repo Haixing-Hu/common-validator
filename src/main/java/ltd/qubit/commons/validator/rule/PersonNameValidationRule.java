@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 import javax.annotation.RegEx;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * The validation rule for validating person names.
@@ -50,7 +52,11 @@ import javax.annotation.RegEx;
  * @see <a href="https://en.wikipedia.org/wiki/GB_18030">GB 18030</a>
  * @author Haixing Hu
  */
+@Immutable
+@ThreadSafe
 public class PersonNameValidationRule implements ValidationRule<String> {
+
+  public static final PersonNameValidationRule INSTANCE = new PersonNameValidationRule(PersonNameType.ANY);
 
   /**
    * 验证中文姓名的正则表达式。
@@ -87,7 +93,7 @@ public class PersonNameValidationRule implements ValidationRule<String> {
 
   private static final Pattern ENGLISH_PATTERN = Pattern.compile(ENGLISH_REGEX);
 
-  private PersonNameType type;
+  private final PersonNameType type;
 
   public PersonNameValidationRule() {
     this(PersonNameType.ANY);
@@ -99,10 +105,6 @@ public class PersonNameValidationRule implements ValidationRule<String> {
 
   public PersonNameType getType() {
     return type;
-  }
-
-  public void setType(final PersonNameType type) {
-    this.type = type;
   }
 
   @Override
