@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.annotation.Nullable;
+
 import ltd.qubit.commons.error.InitializationError;
 import ltd.qubit.commons.lang.SystemUtils;
 import ltd.qubit.commons.util.properties.PropertiesUtils;
@@ -42,6 +44,8 @@ public class ChineseIdentityCardUtils {
   public static final int AREA_INDEX = 0;
 
   public static final int AREA_LENGTH = 6;
+
+  public static final int GENDER_INDEX = 16;
 
   public static final int DECIMAL_BASE = 10;
 
@@ -76,26 +80,85 @@ public class ChineseIdentityCardUtils {
    * 如19491001。出生日期码是按GB/T 7408的规定执行的。
    *
    * <p><b>注意：</b>对于身份证号码中编码的出生日期，此函数不仅验证该日期是否存
-   * 在，也会验证出生日期是否是个合法的日期，同时也会验证该日期是否超过今天的日
-   * 期（不应该超过今天的日期）。
+   * 在，也会验证出生日期是否是个合法的日期，但不会验证该日期是否超过今天的日期（不应该超过今天的日期）。
    *
    * @param number
    *     身份证号码。
-   * @return 若该身份证号码中的出生日期编码合法则返回{@code true}，否则返回{@code false}。
+   * @return
+   *     若该身份证号码中的出生日期编码合法则返回{@code true}，否则返回{@code false}。
    */
   public static boolean isBirthdayValid(final String number) {
+    return getBirthday(number) != null;
+  }
+
+  /**
+   * 从身份证号码提取出生日期。
+   * <p>
+   * 身份证号码第7~12为日期码，表示该居民的出生年月日。格式为YYYYMMDD，
+   * 如19491001。出生日期码是按GB/T 7408的规定执行的。
+   *
+   * <p>
+   * <b>注意：</b>对于身份证号码中编码的出生日期，此函数不仅验证该日期是否存在，也会验证出生
+   * 日期是否是个合法的日期，同时也会验证该日期是否超过今天的日期（不应该超过今天的日期）。
+   *
+   * @param number
+   *     身份证号码。
+   * @return
+   *     若该身份证号码中的出生日期编码合法则返回合法的出生日期，否则返回{@code null}。
+   */
+  @Nullable
+  public static LocalDate getBirthday(final String number) {
     final Integer year = parseNumber(number, YEAR_INDEX, YEAR_INDEX + YEAR_LENGTH);
     final Integer month = parseNumber(number, MONTH_INDEX, MONTH_INDEX + MONTH_LENGTH);
     final Integer day = parseNumber(number, DAY_INDEX, DAY_INDEX + DAY_LENGTH);
     if (year == null || month == null || day == null) {
-      return false;
+      return null;
     }
     try {
-      LocalDate.of(year, month, day);
-      return true;
+      return LocalDate.of(year, month, day);
     } catch (final DateTimeException e) {
-      return false;
+      return null;
     }
+  }
+
+  /**
+   * 从身份证号码中提取性别。
+   *
+   * @param number
+   *     指定的身份证号码。
+   * @return
+   *     若该身份证号码中的性别编码合法则返回合法的性别，即字符串"MALE"或"FEMALE"；否则返回
+   *     {@code null}。
+   */
+  @Nullable
+  public static String getGender(final String number) {
+    if (number == null || number.length() != NUMBER_LENGTH) {
+      return null;
+    }
+    final char ch = number.charAt(GENDER_INDEX);
+    if (ch < '0' || ch > '9') {
+      return null;
+    }
+    return ((ch - '0') % 2 == 1) ? "MALE" : "FEMALE";
+  }
+
+  /**
+   * 从身份证号码中提取家庭住址所在地区编码。
+   * <p>
+   * 注意：此函数不验证该编码是否合法。
+   *
+   * @param number
+   *     指定的身份证号码。
+   * @return
+   *     若该身份证号码中的家庭住址所在地区编码合法则返回家庭住址所在地区编码；否则返回
+   *     {@code null}。
+   */
+  @Nullable
+  public static String getAreaCode(final String number) {
+    if (number == null || number.length() != NUMBER_LENGTH) {
+      return null;
+    }
+    return number.substring(AREA_INDEX, AREA_LENGTH);
   }
 
   /**
@@ -111,10 +174,10 @@ public class ChineseIdentityCardUtils {
    * @return 若该身份证号码中的区县是否合法则返回{@code true}，否则返回{@code false}。
    */
   public static boolean isAreaValid(final String number) {
-    if (number == null || number.length() != NUMBER_LENGTH) {
+    final String area = getAreaCode(number);
+    if (area == null) {
       return false;
     }
-    final String area = number.substring(AREA_INDEX, AREA_LENGTH);
     return (AREA_MAP.get(area) != null);
   }
 

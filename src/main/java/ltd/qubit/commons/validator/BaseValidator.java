@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2024.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -46,8 +46,8 @@ public abstract class BaseValidator<A extends Annotation, T>
       addExpressionVariables(hc);
       addMessageParameters(hc);
       hc.buildConstraintViolationWithTemplate(message)
-          .enableExpressionLanguage()
-          .addConstraintViolation();
+        .enableExpressionLanguage()
+        .addConstraintViolation();
     }
     return valid;
   }

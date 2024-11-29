@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2024.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -37,7 +37,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repeatable(NotEmpty.List.class)
 public @interface NotEmpty {
 
-  String message() default "{ltd.qubit.commons.validator.annotation.NotEmpty.message}";
+  String message() default "{annotation.ltd.qubit.commons.validator.NotEmpty.message}";
 
   Class<?>[] groups() default { };
 

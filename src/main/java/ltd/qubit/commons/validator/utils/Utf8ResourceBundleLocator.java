@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2024.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -19,7 +19,7 @@ import org.hibernate.validator.spi.resourceloading.ResourceBundleLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ltd.qubit.commons.util.bundle.Utf8Control;
+import ltd.qubit.commons.i18n.bundle.Utf8Control;
 
 /**
  * 支持UTF-8编码的 .properties 文件的 {@link ResourceBundleLocator}.

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2024.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -17,10 +17,10 @@ import javax.annotation.RegEx;
 
 import jakarta.validation.ConstraintViolation;
 
+import org.junit.jupiter.api.Test;
+
 import ltd.qubit.commons.net.DomainSuffix;
 import ltd.qubit.commons.net.DomainSuffixRegistry;
-
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

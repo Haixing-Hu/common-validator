@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2024.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -37,7 +37,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repeatable(Email.List.class)
 public @interface Email {
 
-  String message() default "{ltd.qubit.commons.validator.annotation.Email.message}";
+  String message() default "{annotation.ltd.qubit.commons.validator.Email.message}";
 
   Class<?>[] groups() default { };
 

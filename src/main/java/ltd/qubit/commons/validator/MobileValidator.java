@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2024.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -12,7 +12,7 @@ import ltd.qubit.commons.validator.annotation.Mobile;
 import ltd.qubit.commons.validator.rule.ChineseMobileValidationRule;
 
 /**
- * 中国大陆手机号码验证器。
+ * 电子邮件地址验证器。
  *
  * <ul>
  * <li>手机号码可以以 "0", "86", "17951" 开头</li>
@@ -28,11 +28,11 @@ import ltd.qubit.commons.validator.rule.ChineseMobileValidationRule;
  * </li>
  * </ul>
  *
+ * @author 胡海星
  * @see <a href="https://blog.csdn.net/fengshi_sh/article/details/12085307">
  * 最新手机号码验证正则表达式</a>
  * @see <a href="http://www.cnblogs.com/zengxiangzhan/p/phone.html">
  * 最新手机号段归属地数据库(2019年2月新春版)</a>
- * @author 胡海星
  */
 public class MobileValidator extends BaseValidator<Mobile, String> {
 

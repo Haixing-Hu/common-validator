@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2024.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -16,8 +16,8 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import ltd.qubit.commons.validator.rule.PersonNameType;
 import ltd.qubit.commons.validator.PersonNameValidator;
+import ltd.qubit.commons.validator.rule.PersonNameType;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -38,7 +38,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repeatable(PersonName.List.class)
 public @interface PersonName {
 
-  String message() default "{ltd.qubit.commons.validator.annotation.PersonName.message}";
+  String message() default "{annotation.ltd.qubit.commons.validator.PersonName.message}";
 
   Class<?>[] groups() default { };
 
