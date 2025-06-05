@@ -25,38 +25,107 @@ import ltd.qubit.commons.validator.IdentityCardValidator;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class ChineseIdentityCardUtils {
+/**
+ * 中国大陆身份证号码相关的工具类。
+ * <p>
+ * 提供解析和验证身份证号码中特定信息（如出生日期、性别、地区代码）的方法，
+ * 以及相关的常量定义。
+ * <p>
+ * 此类不可实例化。
+ */
+public final class ChineseIdentityCardUtils {
 
+  /**
+   * 身份证号码的长度（18位）。
+   */
   public static final int NUMBER_LENGTH = 18;
 
+  /**
+   * 身份证号码中年份部分的起始索引（从0开始，第7位字符）。
+   */
   public static final int YEAR_INDEX = 6;
 
+  /**
+   * 身份证号码中年份部分的长度（4位）。
+   */
   public static final int YEAR_LENGTH = 4;
 
+  /**
+   * 身份证号码中月份部分的起始索引（从0开始，第11位字符）。
+   */
   public static final int MONTH_INDEX = 10;
 
+  /**
+   * 身份证号码中月份部分的长度（2位）。
+   */
   public static final int MONTH_LENGTH = 2;
 
+  /**
+   * 身份证号码中日期部分的起始索引（从0开始，第13位字符）。
+   */
   public static final int DAY_INDEX = 12;
 
+  /**
+   * 身份证号码中日期部分的长度（2位）。
+   */
   public static final int DAY_LENGTH = 2;
 
+  /**
+   * 身份证号码中地区代码部分的起始索引（从0开始，第1位字符）。
+   */
   public static final int AREA_INDEX = 0;
 
+  /**
+   * 身份证号码中地区代码部分的长度（6位）。
+   */
   public static final int AREA_LENGTH = 6;
 
+  /**
+   * 身份证号码中用于判断性别的顺序码的索引（从0开始，第17位字符）。
+   */
   public static final int GENDER_INDEX = 16;
 
+  /**
+   * 十进制基数（10）。
+   */
   public static final int DECIMAL_BASE = 10;
 
+  /**
+   * 身份证号码前17位数字的加权因子。
+   * 用于计算校验码。
+   */
   public static final int[] RATIO = {
       7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2
   };
 
+  /**
+   * 身份证号码校验码字符集。
+   * 校验码由前17位加权和模11得到，此数组的索引即为模值，对应的值为校验字符。
+   */
   public static final char[] LAST_CHAR = {
       '1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'
   };
 
+  /**
+   * 私有构造函数，防止实例化。
+   */
+  private ChineseIdentityCardUtils() {
+    // 工具类不应被实例化
+  }
+
+  /**
+   * 从字符串的指定部分解析数字。
+   *
+   * @param number
+   *     包含数字的字符串。
+   * @param start
+   *     解析的起始索引（包含）。
+   * @param end
+   *     解析的结束索引（不包含）。
+   * @return
+   *     解析得到的整数；如果输入无效（例如，{@code number} 为 {@code null}，
+   *     索引越界，或指定部分包含非数字字符），则返回 {@code null}。
+   */
   public static Integer parseNumber(final String number, final int start, final int end) {
     if ((number == null) || (start < 0) || (end <= start) || (end > number.length())) {
       return null;
@@ -181,7 +250,17 @@ public class ChineseIdentityCardUtils {
     return (AREA_MAP.get(area) != null);
   }
 
+  /**
+   * 中国行政区划代码属性文件的资源路径。
+   */
   public static final String AREA_MAP_RESOURCE = "/china-area.properties";
+  
+  /**
+   * 中国行政区划代码与其名称的映射表。
+   * <p>
+   * 键为6位地区代码，值为地区名称。
+   * 此映射表在类加载时从 {@link #AREA_MAP_RESOURCE} 文件中加载并设为不可修改。
+   */
   public static final Map<String, String> AREA_MAP;
 
   static {

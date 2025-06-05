@@ -18,24 +18,27 @@ import org.hibernate.validator.constraintvalidation.HibernateConstraintValidator
 import ltd.qubit.commons.reflect.AnnotationUtils;
 
 /**
- * The base class of all validators.
+ * 所有验证器的基类。
  *
- * @param <A>
- *       The type of constraint annotations.
- * @param <T>
- *       The type of values to be validated.
- * @author Haixing Hu
+ * @param <A> 约束注解的类型。
+ * @param <T> 要验证的值的类型。
+ * @author 胡海星
  */
 public abstract class BaseValidator<A extends Annotation, T>
     implements ConstraintValidator<A, T> {
 
+  /**
+   * 关联的约束注解实例。
+   */
   protected Annotation annotation;
 
+  /** {@inheritDoc} */
   @Override
   public void initialize(final A annotation) {
     this.annotation = annotation;
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean isValid(final T value, final ConstraintValidatorContext context) {
     final boolean valid = validate(value);
@@ -52,6 +55,15 @@ public abstract class BaseValidator<A extends Annotation, T>
     return valid;
   }
 
+  /**
+   * 获取验证失败时的错误消息。
+   * <p>
+   * 此方法首先尝试从注解的 {@code message} 属性获取消息。
+   * 如果 {@code message} 属性未设置或为空，则会生成一个默认的错误消息，
+   * 格式为 "字段值违反了 @注解名 的约束"。
+   *
+   * @return 错误消息字符串。
+   */
   protected String getErrorMessage() {
     final String message = AnnotationUtils.getAttributeOrNull(annotation, "message");
     if (message != null) {
@@ -62,50 +74,44 @@ public abstract class BaseValidator<A extends Annotation, T>
   }
 
   /**
-   * Adds expression variables to the context used to interpolate the error message.
+   * 向用于插值错误消息的上下文中添加表达式变量。
    * <p>
-   * The default implementation does nothing. Subclasses may override this
-   * method to add additional variables.
+   * 默认实现不执行任何操作。子类可以覆盖此方法以添加额外的变量。
    * <p>
-   * Apart from the syntax, the main difference between message parameters and
-   * expression variables is that message parameters are simply interpolated
-   * whereas expression variables are interpreted using the Expression Language
-   * engine. In practice, use message parameters if you do not need the advanced
-   * features of an Expression Language.
+   * 除了语法之外，消息参数和表达式变量之间的主要区别在于，消息参数只是被简单地插值，
+   * 而表达式变量则是使用表达式语言（Expression Language）引擎进行解释。
+   * 在实践中，如果您不需要表达式语言的高级功能，请使用消息参数。
    *
    * @param hc
-   *     the context to which to add the variables.
+   *     要向其添加变量的上下文。
    */
   protected void addExpressionVariables(final HibernateConstraintValidatorContext hc) {
     //  do nothing
   }
 
   /**
-   * Adds message parameters to the context used to interpolate the error message.
+   * 向用于插值错误消息的上下文中添加消息参数。
    * <p>
-   * The default implementation does nothing. Subclasses may override this
-   * method to add additional parameters.
+   * 默认实现不执行任何操作。子类可以覆盖此方法以添加额外的参数。
    * <p>
-   * Apart from the syntax, the main difference between message parameters and
-   * expression variables is that message parameters are simply interpolated
-   * whereas expression variables are interpreted using the Expression Language
-   * engine. In practice, use message parameters if you do not need the advanced
-   * features of an Expression Language.
+   * 除了语法之外，消息参数和表达式变量之间的主要区别在于，消息参数只是被简单地插值，
+   * 而表达式变量则是使用表达式语言（Expression Language）引擎进行解释。
+   * 在实践中，如果您不需要表达式语言的高级功能，请使用消息参数。
    *
    * @param hc
-   *     the context to which to add the parameters.
+   *     要向其添加参数的上下文。
    */
   protected void addMessageParameters(final HibernateConstraintValidatorContext hc) {
     //  do nothing
   }
 
   /**
-   * Validates the specified value.
+   * 验证指定的值。
    *
    * @param value
-   *     the value to be validated.
+   *     要验证的值。
    * @return
-   *     {@code true} if the specified value is valid; {@code false} otherwise.
+   *     如果指定的值有效，则返回 {@code true}；否则返回 {@code false}。
    */
   public abstract boolean validate(T value);
 

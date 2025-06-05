@@ -19,8 +19,12 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public class BooleanValidationRule implements ValidationRule<String> {
 
+  /**
+   * {@link BooleanValidationRule} 的单例实例。
+   */
   public static final BooleanValidationRule INSTANCE = new BooleanValidationRule();
 
+  /** {@inheritDoc} */
   @Override
   public boolean validate(@Nullable final String str) {
     if (str == null) {

@@ -52,6 +52,7 @@ import ltd.qubit.commons.validator.rule.PersonNameValidationRule;
  */
 public class PersonNameValidator extends BaseValidator<PersonName, String> {
 
+  /** {@inheritDoc} */
   @Override
   public boolean validate(final String str) {
     final PersonNameType type = AnnotationUtils.getAttribute(annotation, "value");

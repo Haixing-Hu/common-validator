@@ -12,7 +12,7 @@ import ltd.qubit.commons.validator.annotation.Mobile;
 import ltd.qubit.commons.validator.rule.ChineseMobileValidationRule;
 
 /**
- * 电子邮件地址验证器。
+ * 手机号码验证器。
  *
  * <ul>
  * <li>手机号码可以以 "0", "86", "17951" 开头</li>
@@ -36,6 +36,8 @@ import ltd.qubit.commons.validator.rule.ChineseMobileValidationRule;
  */
 public class MobileValidator extends BaseValidator<Mobile, String> {
 
+  /** {@inheritDoc} */
+  @Override
   public boolean validate(final String str) {
     return ChineseMobileValidationRule.INSTANCE.validate(str);
   }

@@ -42,6 +42,9 @@ import javax.annotation.concurrent.ThreadSafe;
 @ThreadSafe
 public class ChineseMobileValidationRule {
 
+  /**
+   * {@link ChineseMobileValidationRule} 的单例实例。
+   */
   public static final ChineseMobileValidationRule INSTANCE = new ChineseMobileValidationRule();
 
   @RegEx
@@ -50,6 +53,15 @@ public class ChineseMobileValidationRule {
 
   private static final Pattern PATTERN = Pattern.compile(REGEX);
 
+  /**
+   * 验证给定的字符串是否是一个合法的中国大陆手机号码。
+   *
+   * @param mobile
+   *     要验证的手机号码字符串，可以为 {@code null}。
+   * @return
+   *     如果字符串是一个合法的中国大陆手机号码，则返回 {@code true}；否则返回 {@code false}。
+   *     如果输入为 {@code null} 或空字符串，也返回 {@code false}。
+   */
   public boolean validate(@Nullable final String mobile) {
     if (mobile == null || mobile.isEmpty()) {
       return false;

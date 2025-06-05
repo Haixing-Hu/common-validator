@@ -20,6 +20,11 @@ import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpo
 public class Utf8ResourceBundleMessageInterpolator extends
         ResourceBundleMessageInterpolator {
 
+  /**
+   * 构造一个 {@code Utf8ResourceBundleMessageInterpolator} 实例。
+   * <p>
+   * 使用 {@link Utf8ResourceBundleLocator} 来加载 UTF-8 编码的验证消息。
+   */
   public Utf8ResourceBundleMessageInterpolator() {
     super(new Utf8ResourceBundleLocator(USER_VALIDATION_MESSAGES));
   }

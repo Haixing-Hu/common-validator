@@ -16,7 +16,7 @@ import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
 /**
- * The validation rule of email addresses.
+ * 电子邮件地址的验证规则。
  *
  * @see <a href="http://fightingforalostcause.net/misc/2006/compare-email-regex.php">
  *   Comparing E-mail Address Validating Regular Expressions</a>
@@ -24,12 +24,15 @@ import javax.annotation.concurrent.ThreadSafe;
  *   VALIDATING EMAIL ADDRESSES</a>
  * @see <a href="http://stackoverflow.com/questions/201323/what-is-the-best-regular-expression-for-validating-email-addresses/201378#201378">
  *   How to validate an email address using a regular expression?</a>
- * @author Haixing Hu
+ * @author 胡海星
  */
 @Immutable
 @ThreadSafe
 public class EmailValidationRule implements ValidationRule<String> {
 
+  /**
+   * {@link EmailValidationRule} 的单例实例。
+   */
   public static final EmailValidationRule INSTANCE = new EmailValidationRule();
 
   @RegEx
@@ -39,6 +42,7 @@ public class EmailValidationRule implements ValidationRule<String> {
 
   private static final Pattern PATTERN = Pattern.compile(REGEX);
 
+  /** {@inheritDoc} */
   @Override
   public boolean validate(@Nullable final String email) {
     if (email == null || email.isEmpty()) {

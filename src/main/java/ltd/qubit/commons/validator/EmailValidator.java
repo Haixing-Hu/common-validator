@@ -24,6 +24,7 @@ import ltd.qubit.commons.validator.rule.EmailValidationRule;
  */
 public class EmailValidator extends BaseValidator<Email, String> {
 
+  /** {@inheritDoc} */
   @Override
   public boolean validate(final String str) {
     return EmailValidationRule.INSTANCE.validate(str);

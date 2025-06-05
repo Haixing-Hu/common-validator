@@ -23,10 +23,19 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public class IntegerValidationRule implements ValidationRule<String> {
 
+  /**
+   * 用于验证十进制整数的正则表达式。
+   * <p>
+   * 该正则表达式允许前导或尾随空格，以及可选的前导正号 ({@code +}) 或负号 ({@code -})。
+   */
   public static final Pattern REGEXP = Pattern.compile("^\\s*[+-]?\\d+\\s*$");
 
+  /**
+   * {@link IntegerValidationRule} 的单例实例。
+   */
   public static final IntegerValidationRule INSTANCE = new IntegerValidationRule();
 
+  /** {@inheritDoc} */
   @Override
   public boolean validate(@Nullable final String str) {
     return (str != null) && REGEXP.matcher(str).matches();

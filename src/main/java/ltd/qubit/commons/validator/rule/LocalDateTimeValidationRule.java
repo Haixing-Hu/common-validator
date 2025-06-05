@@ -23,17 +23,34 @@ import javax.annotation.concurrent.Immutable;
  *   <li>yyyy-M-dd HH:mm:ss</li>
  *   <li>yyyy-MM-d HH:mm:ss</li>
  *   <li>yyyy-M-d HH:mm:ss</li>
- * </u>
+ * </ul>
  *
  * @author 胡海星
  */
 @Immutable
 public class LocalDateTimeValidationRule implements ValidationRule<String> {
 
+  /**
+   * 用于验证本地日期时间字符串的正则表达式。
+   * <p>
+   * 该正则表达式匹配的格式允许：
+   * <ul>
+   *   <li>年份为4位数字。</li>
+   *   <li>月份和日期为1或2位数字。</li>
+   *   <li>小时、分钟和秒为2位数字。</li>
+   *   <li>日期和时间之间用空格分隔。</li>
+   *   <li>允许前导或尾随空格。</li>
+   * </ul>
+   * 示例： "2023-12-31 08:30:00", "2023-1-1 08:30:00"
+   */
   public static final Pattern REGEXP = Pattern.compile("^\\s*\\d{4}-\\d{1,2}-\\d{1,2} \\d{2}:\\d{2}:\\d{2}\\s*$");
 
+  /**
+   * {@link LocalDateTimeValidationRule} 的单例实例。
+   */
   public static final LocalDateTimeValidationRule INSTANCE = new LocalDateTimeValidationRule();
 
+  /** {@inheritDoc} */
   @Override
   public boolean validate(@Nullable final String str) {
     return (str != null) && REGEXP.matcher(str).matches();

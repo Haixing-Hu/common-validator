@@ -32,21 +32,33 @@ public class Utf8ResourceBundleLocator implements ResourceBundleLocator {
 
   private static final Logger logger = LoggerFactory.getLogger(Utf8ResourceBundleLocator.class);
 
+  /**
+   * 用于加载 UTF-8 编码的 {@code .properties} 文件的 {@link ResourceBundle.Control} 实例。
+   */
   protected static final ResourceBundle.Control UTF8_CONTROL = new Utf8Control();
 
+  /**
+   * 要加载的资源包的名称。
+   */
   private final String bundleName;
 
+  /**
+   * 构造一个 {@code Utf8ResourceBundleLocator} 实例。
+   *
+   * @param bundleName
+   *     要加载的资源包的名称，例如 "ValidationMessages"。
+   */
   public Utf8ResourceBundleLocator(final String bundleName) {
     this.bundleName = bundleName;
   }
 
 
   /**
-   * Search current thread classloader for the resource bundle. If not found,
-   * search validator (this) classloader.
+   * 首先在当前线程的类加载器中搜索资源包。如果未找到，
+   * 则在验证器（此对象）的类加载器中搜索。
    *
-   * @param locale The locale of the bundle to load.
-   * @return the resource bundle or <code>null</code> if none is found.
+   * @param locale 要加载的资源包的区域设置。
+   * @return 资源包；如果未找到，则返回 {@code null}。
    */
   @Override
   public ResourceBundle getResourceBundle(final Locale locale) {
@@ -64,6 +76,14 @@ public class Utf8ResourceBundleLocator implements ResourceBundleLocator {
     return bundle;
   }
 
+  /**
+   * 使用指定的类加载器和区域设置加载资源包。
+   *
+   * @param classLoader 类加载器。
+   * @param locale 区域设置。
+   * @param message 如果加载失败且资源未找到时记录的警告信息。
+   * @return 加载的资源包；如果发生 {@link MissingResourceException}，则返回 {@code null}。
+   */
   private ResourceBundle loadBundle(final ClassLoader classLoader,
       final Locale locale, final String message) {
     ResourceBundle bundle = null;
@@ -75,10 +95,23 @@ public class Utf8ResourceBundleLocator implements ResourceBundleLocator {
     return bundle;
   }
 
+  /**
+   * 一个 {@link PrivilegedAction} 实现，用于安全地获取类加载器。
+   * <p>
+   * 此类用于在启用安全管理器（Security Manager）的环境中获取上下文类加载器或指定类的类加载器。
+   */
   private static class GetClassLoader implements PrivilegedAction<ClassLoader> {
 
+    /**
+     * 从其获取类加载器的目标类；如果为 {@code null}，则获取当前线程的上下文类加载器。
+     */
     private final Class<?> clazz;
 
+    /**
+     * 获取当前线程的上下文类加载器。
+     *
+     * @return 当前线程的上下文类加载器。
+     */
     private static ClassLoader fromContext() {
       final GetClassLoader action = new GetClassLoader(null);
       if (System.getSecurityManager() != null) {
@@ -88,6 +121,13 @@ public class Utf8ResourceBundleLocator implements ResourceBundleLocator {
       }
     }
 
+    /**
+     * 获取指定类的类加载器。
+     *
+     * @param clazz 要获取其类加载器的类，不能为 {@code null}。
+     * @return 指定类的类加载器。
+     * @throws IllegalArgumentException 如果 {@code clazz} 为 {@code null}。
+     */
     private static ClassLoader fromClass(final Class<?> clazz) {
       if (clazz == null) {
         throw new IllegalArgumentException("Class is null");
@@ -100,10 +140,17 @@ public class Utf8ResourceBundleLocator implements ResourceBundleLocator {
       }
     }
 
+    /**
+     * 构造一个 {@code GetClassLoader} 动作。
+     *
+     * @param clazz
+     *     要从中获取类加载器的类。如果为 {@code null}，则此动作将获取当前线程的上下文类加载器。
+     */
     private GetClassLoader(final Class<?> clazz) {
       this.clazz = clazz;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ClassLoader run() {
       if (clazz != null) {

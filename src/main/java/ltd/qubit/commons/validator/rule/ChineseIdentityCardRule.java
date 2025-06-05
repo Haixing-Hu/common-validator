@@ -59,6 +59,9 @@ import static ltd.qubit.commons.validator.rule.impl.ChineseIdentityCardUtils.RAT
 @ThreadSafe
 public class ChineseIdentityCardRule implements ValidationRule<String> {
 
+  /**
+   * {@link ChineseIdentityCardRule} 的单例实例。
+   */
   public static final ChineseIdentityCardRule INSTANCE = new ChineseIdentityCardRule();
 
   /**

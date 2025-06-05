@@ -16,7 +16,7 @@ import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
 /**
- * The validation rule for validating person names.
+ * 用于验证个人姓名的验证规则。
  *
  * <ul>
  * <li>中文名称允许出现下述 Unicode 字符集
@@ -50,12 +50,15 @@ import javax.annotation.concurrent.ThreadSafe;
  *   现在的技术而言，字体可以不用考虑储存空间大小的问题，可是为什么大多数网站仍然不支持生僻字？</a>
  * @see <a href="https://www.zhihu.com/question/19668721">CSS 怎么处理生僻汉字？</a>
  * @see <a href="https://en.wikipedia.org/wiki/GB_18030">GB 18030</a>
- * @author Haixing Hu
+ * @author 胡海星
  */
 @Immutable
 @ThreadSafe
 public class PersonNameValidationRule implements ValidationRule<String> {
 
+  /**
+   * {@link PersonNameValidationRule} 的一个单例实例，用于验证任何类型的姓名。
+   */
   public static final PersonNameValidationRule INSTANCE = new PersonNameValidationRule(PersonNameType.ANY);
 
   /**
@@ -95,18 +98,35 @@ public class PersonNameValidationRule implements ValidationRule<String> {
 
   private final PersonNameType type;
 
+  /**
+   * 构造一个默认的 {@link PersonNameValidationRule}。
+   * <p>
+   * 默认情况下，此规则将验证任何类型的姓名（中文、拼音或英文）。
+   */
   public PersonNameValidationRule() {
     this(PersonNameType.ANY);
   }
 
+  /**
+   * 构造一个指定类型的 {@link PersonNameValidationRule}。
+   *
+   * @param type
+   *     要验证的姓名类型。
+   */
   public PersonNameValidationRule(final PersonNameType type) {
     this.type = type;
   }
 
+  /**
+   * 获取此验证规则配置的姓名类型。
+   *
+   * @return 当前配置的姓名类型。
+   */
   public PersonNameType getType() {
     return type;
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean validate(@Nullable final String name) {
     if (name == null || name.isEmpty()) {
