@@ -8,8 +8,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package ltd.qubit.commons.validator.utils;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -63,13 +61,13 @@ public class Utf8ResourceBundleLocator implements ResourceBundleLocator {
   @Override
   public ResourceBundle getResourceBundle(final Locale locale) {
     ResourceBundle bundle = null;
-    ClassLoader loader = GetClassLoader.fromContext();
+    ClassLoader loader = Thread.currentThread().getContextClassLoader();
     if (loader != null) {
       bundle = loadBundle(loader, locale,
               bundleName + " not found by thread local classloader");
     }
     if (bundle == null) {
-      loader = GetClassLoader.fromClass(PlatformResourceBundleLocator.class);
+      loader = PlatformResourceBundleLocator.class.getClassLoader();
       bundle = loadBundle(loader, locale,
               bundleName + " not found by validator classloader");
     }
@@ -93,71 +91,5 @@ public class Utf8ResourceBundleLocator implements ResourceBundleLocator {
       logger.warn(message);
     }
     return bundle;
-  }
-
-  /**
-   * 一个 {@link PrivilegedAction} 实现，用于安全地获取类加载器。
-   * <p>
-   * 此类用于在启用安全管理器（Security Manager）的环境中获取上下文类加载器或指定类的类加载器。
-   */
-  private static class GetClassLoader implements PrivilegedAction<ClassLoader> {
-
-    /**
-     * 从其获取类加载器的目标类；如果为 {@code null}，则获取当前线程的上下文类加载器。
-     */
-    private final Class<?> clazz;
-
-    /**
-     * 获取当前线程的上下文类加载器。
-     *
-     * @return 当前线程的上下文类加载器。
-     */
-    private static ClassLoader fromContext() {
-      final GetClassLoader action = new GetClassLoader(null);
-      if (System.getSecurityManager() != null) {
-        return AccessController.doPrivileged(action);
-      } else {
-        return action.run();
-      }
-    }
-
-    /**
-     * 获取指定类的类加载器。
-     *
-     * @param clazz 要获取其类加载器的类，不能为 {@code null}。
-     * @return 指定类的类加载器。
-     * @throws IllegalArgumentException 如果 {@code clazz} 为 {@code null}。
-     */
-    private static ClassLoader fromClass(final Class<?> clazz) {
-      if (clazz == null) {
-        throw new IllegalArgumentException("Class is null");
-      }
-      final GetClassLoader action = new GetClassLoader(clazz);
-      if (System.getSecurityManager() != null) {
-        return AccessController.doPrivileged(action);
-      } else {
-        return action.run();
-      }
-    }
-
-    /**
-     * 构造一个 {@code GetClassLoader} 动作。
-     *
-     * @param clazz
-     *     要从中获取类加载器的类。如果为 {@code null}，则此动作将获取当前线程的上下文类加载器。
-     */
-    private GetClassLoader(final Class<?> clazz) {
-      this.clazz = clazz;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public ClassLoader run() {
-      if (clazz != null) {
-        return clazz.getClassLoader();
-      } else {
-        return Thread.currentThread().getContextClassLoader();
-      }
-    }
   }
 }
